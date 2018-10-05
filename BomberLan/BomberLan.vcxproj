@@ -135,6 +135,7 @@
   <ItemGroup>
     <ClInclude Include="Bomberman.h" />
     <ClInclude Include="Brick.h" />
+    <ClInclude Include="Enum.h" />
     <ClInclude Include="Event.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Path.h" />

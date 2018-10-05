@@ -1,7 +1,6 @@
 #pragma once
 #include "Renderable.h"
 
-
 class Tiles : public Renderable
 {
 public:
