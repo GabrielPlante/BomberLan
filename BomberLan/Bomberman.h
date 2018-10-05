@@ -1,8 +1,10 @@
 #pragma once
-class Bomberman
+#include "Renderable.h"
+class Bomberman : public Renderable
 {
 public:
-	Bomberman();
+	Bomberman(int x, int y, SDL_Renderer* gRenderer);
 	~Bomberman();
+private:
 };
 

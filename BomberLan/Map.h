@@ -1,19 +1,16 @@
 #pragma once
-#include <SDL.h>
-#include <iostream>
-#include "Tiles.h"
 #include "Path.h"
+#include "Brick.h"
 #include <vector>
 #include <memory>
 
 class Map
 {
 public:
-	Map();
-	void init(SDL_Renderer* gRenderer);
+	Map(SDL_Renderer* gRenderer);
 	void renderCopy(SDL_Renderer* gRenderer);
 	~Map();
 private:
-	std::vector<std::unique_ptr<Tiles>> tiles;
+	std::vector<std::unique_ptr<Tiles>> tiles;//Vector of unique_ptr so there is one array for all the tiles (path, brick...)
 };
 

@@ -1,19 +1,12 @@
-#include <iostream>
-#include <../../Window.h>
+#include "Window.h"
 
 int main( int argc, char* args[] )
 {
 	try {
 		Window mainWindow(630, 630);
 	
-		SDL_Event event;
-		bool quit{ false };
-	
-		while (!quit) {
-			while (SDL_PollEvent(&event) != 0) {
-				if (event.type == SDL_QUIT)
-					quit = true;
-			}
+		Event event;
+		while (event.checkEvent()) {
 			mainWindow.refresh();
 		}
 	}

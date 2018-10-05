@@ -19,19 +19,20 @@ Window::Window(const int screenWith, const int screenHeight)
 	SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 255);
 
 	//Start map
-	map.init(gRenderer);
+	map = std::unique_ptr<Map>(new Map(gRenderer));
+
+	//Create player (will change)
+	std::unique_ptr<Bomberman> joueur{ new Bomberman(35+35/2-18/2,35+35/2-36/2,gRenderer) };//To put it inside a tile
+	listeJoueur.push_back(std::move(joueur));
 }
 void Window::refresh()
 {
 	SDL_RenderClear(gRenderer);//Clear screen
-	map.renderCopy(gRenderer);//Render texture to screen
+	map->renderCopy(gRenderer);//Render the map to the screen
+	for (auto x = listeJoueur.begin(); x != listeJoueur.end(); ++x)
+		(**x).renderCopy(gRenderer);
 	SDL_RenderPresent(gRenderer);//Update screen
 	SDL_Delay(5);//Delay to make the processor breathe
-}
-
-bool Window::loadMedia()//Is useless ?
-{
-	return true;
 }
 
 Window::~Window()

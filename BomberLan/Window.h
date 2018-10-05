@@ -1,20 +1,18 @@
 #pragma once
-#include <SDL.h>
-#include <iostream>
-#include <stdexcept>
 #include "Map.h"
+#include "Event.h"
 
 class Window
 {
 public:
 	Window(const int screenWith, const int screenHeight);
 	void refresh();
-	bool loadMedia();
 	~Window();
 private:
 	SDL_Window* gWindow{ nullptr };
 	SDL_Renderer* gRenderer{ nullptr };
-	Map map{};
+	std::unique_ptr<Map> map;//Unique_ptr so it don't need to be initialized know
+	std::vector<std::unique_ptr<Bomberman>> listeJoueur;
 	int SCREEN_WIDTH;
 	int SCREEN_HEIGHT;
 };
