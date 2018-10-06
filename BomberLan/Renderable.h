@@ -13,8 +13,9 @@ public:
 	SDL_Texture* getTexture();
 	SDL_Rect* getPosition();
 	~Renderable();
-protected:
+private:
 	SDL_Texture* texture = nullptr;
+protected:
 	SDL_Rect position;
 };
 

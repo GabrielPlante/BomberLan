@@ -2,8 +2,7 @@
 #include "Renderable.h"
 #include "Map.h"
 #include "Bomb.h"
-class Map;//Because Map.h and Bomberman.h include eachother
-enum Direction;//Same
+
 class Bomberman : public Renderable
 {
 public:

@@ -1,2 +1,3 @@
 #pragma once
-enum Direction {TOP, RIGHT, BOTTOM, LEFT};
+enum Direction {TOP, LEFT, BOTTOM, RIGHT};
+enum TileProperty {WALKABLE, DESTROYABLE, NOTHING, INEXISTANT};

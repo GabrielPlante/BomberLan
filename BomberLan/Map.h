@@ -3,18 +3,19 @@
 #include "Brick.h"
 #include <vector>
 #include <memory>
-#include "Bomberman.h"
 #include "Enum.h"
 
-class Bomberman;//Won't work without this one, no idea why
 class Map
 {
 public:
 	Map(SDL_Renderer* gRenderer);
 	void renderCopy(SDL_Renderer* gRenderer);
-	bool checkNextTile(std::array<int,2> playerTilePosition, Direction direction);
+	TileProperty checkNextTile(std::array<int,2> playerTilePosition, Direction direction);
+	bool destroyTile(std::array<int,2> tilePosition);
 	~Map();
 private:
 	std::vector<std::unique_ptr<Tiles>> tiles;//Vector of unique_ptr so there is one array for all the tiles (path, brick...)
+	SDL_Renderer* gRenderer;
+	std::array<std::array<int, 2>, 4> playerPosition;//4 players only
 	const int mapSize = 18;//630/35=18
-	};
+};

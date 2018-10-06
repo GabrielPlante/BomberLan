@@ -8,7 +8,7 @@ Bomberman::Bomberman(int xTile, int yTile, SDL_Renderer* gRenderer, Map* map)
 	this->map = map;
 	this->gRenderer = gRenderer;
 	nbrOfBomb = 1;
-	bombPower = 1;
+	bombPower = 10;
 }
 
 void Bomberman::renderCopy() {
@@ -19,7 +19,7 @@ void Bomberman::renderCopy() {
 }
 
 bool Bomberman::refresh() {
-	for (int i = 0; i != droppedBomb.size(); ++i) {//Couldn't get it work nicely with iterator
+	for (int i = 0; i != droppedBomb.size(); ++i) {//Couldn't get it to work nicely with iterator
 		if (!droppedBomb[i]->refresh()) {
 			droppedBomb.erase(droppedBomb.begin()+i);
 			--i;
@@ -29,7 +29,7 @@ bool Bomberman::refresh() {
 }
 
 void Bomberman::move(Direction direction) {
-	if (map->checkNextTile(getTilePosition(), direction)) {
+	if (map->checkNextTile(getTilePosition(), direction) == WALKABLE) {
 		switch (direction) {
 		case TOP: position.y -= 35; break;
 		case LEFT: position.x -= 35; break;
@@ -45,7 +45,7 @@ void Bomberman::dropBomb() {
 		if ((**it).getTilePosition() == getTilePosition())
 			drop = false;
 	if (drop) {
-		std::unique_ptr<Bomb> bomb{ new Bomb(getTilePosition()[0], getTilePosition()[1], bombPower, gRenderer) };
+		std::unique_ptr<Bomb> bomb{ new Bomb(getTilePosition()[0], getTilePosition()[1], bombPower, gRenderer, map) };
 		droppedBomb.push_back(std::move(bomb));
 	}
 }
