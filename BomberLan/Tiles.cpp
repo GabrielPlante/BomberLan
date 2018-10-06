@@ -6,6 +6,9 @@ Tiles::Tiles(int x, int y, std::string path, SDL_Renderer* gRenderer)
 
 }
 
+bool Tiles::refresh() {
+	return true;
+}
 
 Tiles::~Tiles()
 {

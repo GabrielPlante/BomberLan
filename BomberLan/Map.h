@@ -6,7 +6,7 @@
 #include "Bomberman.h"
 #include "Enum.h"
 
-class Bomberman;
+class Bomberman;//Won't work without this one, no idea why
 class Map
 {
 public:

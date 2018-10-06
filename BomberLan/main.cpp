@@ -14,7 +14,8 @@ int main( int argc, char* args[] )
 		while (event.checkEvent(&player)) {
 			mainWindow.clear();
 			map.renderCopy(mainWindow.getRenderer());
-			player.renderCopy(mainWindow.getRenderer());
+			player.refresh();
+			player.renderCopy();
 			mainWindow.update();
 		}
 	}

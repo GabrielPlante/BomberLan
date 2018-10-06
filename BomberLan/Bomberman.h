@@ -1,17 +1,23 @@
 #pragma once
 #include "Renderable.h"
 #include "Map.h"
-#include <array>
+#include "Bomb.h"
 class Map;//Because Map.h and Bomberman.h include eachother
 enum Direction;//Same
 class Bomberman : public Renderable
 {
 public:
 	Bomberman(int xTile, int yTile, SDL_Renderer* gRenderer, Map* map);
-	std::array<int, 2> getTilePosition();
+	void renderCopy();
+	bool refresh() override;
 	void move(Direction direction);
+	void dropBomb();
 	~Bomberman();
 private:
 	Map* map;
+	std::vector<std::unique_ptr<Bomb>> droppedBomb;
+	SDL_Renderer* gRenderer;//To drop bomb
+	int nbrOfBomb;
+	int bombPower;
 };
 

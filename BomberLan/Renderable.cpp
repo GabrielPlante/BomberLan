@@ -24,6 +24,10 @@ void Renderable::renderCopy(SDL_Renderer* gRenderer) {
 	SDL_RenderCopy(gRenderer, texture, nullptr, &position);
 }
 
+std::array<int, 2> Renderable::getTilePosition() {
+	return std::array<int, 2> {(position.x + position.w / 2 - 35 / 2) / 35, (position.y + position.h / 2 - 35 / 2) / 35};
+}
+
 SDL_Texture* Renderable::getTexture() {
 	return texture;
 }
