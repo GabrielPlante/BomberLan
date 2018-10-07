@@ -11,13 +11,13 @@ Bomb::Bomb(int xTile, int yTile, int power, SDL_Renderer* gRenderer, Map* map)
 }
 
 void Bomb::renderCopy(SDL_Renderer* gRenderer) {
-	if (SDL_GetTicks() < dropTime + 2000 ) Renderable::renderCopy(gRenderer);
-	else {
+	if (!explosionTime) Renderable::renderCopy(gRenderer);
+	else if (SDL_GetTicks() < explosionTime + 100) {
 		for (int i = 0; i != 4; ++i) {//For every direction
 			bool x = false;//We need to stop the explosion at the first non-walkable block
 			for (int j = 1; j != power + 1 && !x; ++j) {
 				SDL_Rect explosion;
-				switch (i)
+				switch (i)//GL HF
 				{
 				case 0: if (map->checkNextTile({ getTilePosition()[0],getTilePosition()[1] - j + 1 }, TOP) != WALKABLE) {
 					x = true;
@@ -52,17 +52,18 @@ void Bomb::renderCopy(SDL_Renderer* gRenderer) {
 }
 
 bool Bomb::refresh() {
-	if (SDL_GetTicks() > dropTime + 2000) {
-		if (explode())
+	if (SDL_GetTicks() > dropTime + 2000) {//2 sec before explosion
+		if (!explosionTime)
+			explode();
+		else if (SDL_GetTicks() > explosionTime + 100)//Explosion effect last 100 ms
 			return false;
 	}
 	return true;
 }
 
-bool Bomb::explode() {
-	if (SDL_GetTicks() > dropTime + 2200)//The explosion last 200ms
-		return true;
-	if (!exploded) {
+void Bomb::explode() {
+	if (!explosionTime) {
+		explosionTime = SDL_GetTicks();
 		map->destroyTile(getTilePosition());//Destroy the actual tile (to kill players)
 		for (int i = 0; i != 4; ++i) {//For every direction
 			bool x = false;//We need to stop the explosion at the first non-walkable block
@@ -76,9 +77,7 @@ bool Bomb::explode() {
 				}
 			}
 		}
-		exploded = true;
 	}
-	return false;
 }
 
 Bomb::~Bomb()

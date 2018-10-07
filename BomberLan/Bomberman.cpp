@@ -87,7 +87,7 @@ void Bomberman::dropBomb() {
 			if ((**it).getTilePosition() == getTilePosition())
 				drop = false;
 		if (drop) {
-			std::unique_ptr<Bomb> bomb{ new Bomb(getTilePosition()[0], getTilePosition()[1], bombPower, gRenderer, map) };
+			std::shared_ptr<Bomb> bomb{ new Bomb(getTilePosition()[0], getTilePosition()[1], bombPower, gRenderer, map) };
 			droppedBomb.push_back(std::move(bomb));
 		}
 	}
@@ -97,6 +97,6 @@ void Bomberman::die() {
 	alive = false;
 }
 
-Bomberman::~Bomberman()
-{
+std::vector<std::shared_ptr<Bomb>>* Bomberman::getBombs() {
+	return &droppedBomb;
 }

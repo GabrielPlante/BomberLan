@@ -15,15 +15,15 @@ public:
 	void move();
 	void dropBomb();
 	void die();
-	~Bomberman();
+	std::vector<std::shared_ptr<Bomb>>* getBombs();
 private:
 	Map* map;
-	std::vector<std::unique_ptr<Bomb>> droppedBomb;
+	std::vector<std::shared_ptr<Bomb>> droppedBomb;
 	SDL_Renderer* gRenderer;//To drop bomb
 	Direction inputDirection = NOT;
 	Direction movingDirection = NOT;
 	bool isPlayer;
-	float movingSpeed = 1 / 100;
+	int movingSpeed = 1 ;
 	unsigned int nbrOfBomb = 10;
 	unsigned int bombPower = 1;
 	bool alive = true;

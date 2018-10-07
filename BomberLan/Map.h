@@ -7,12 +7,13 @@
 #include "Bomberman.h"
 
 class Bomberman;
+class Bomb;
 
 class Map
 {
 public:
 	Map(SDL_Renderer* gRenderer);
-	void addPlayers(std::array<Bomberman*, 4>);
+	void addPlayers(std::array<Bomberman*, 4> players);
 	void renderCopy(SDL_Renderer* gRenderer);
 	TileProperty checkNextTile(std::array<int,2> playerTilePosition, Direction direction);
 	bool destroyTile(std::array<int,2> tilePosition);

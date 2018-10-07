@@ -12,7 +12,7 @@ int main( int argc, char* args[] )
 			Bomberman{13, 4, mainWindow.getRenderer(), &map, false},
 			Bomberman{4, 13, mainWindow.getRenderer(), &map, false},
 			Bomberman{13, 13, mainWindow.getRenderer(), &map, false},
-			Bomberman{4, 4, mainWindow.getRenderer(), &map, true} };//The player is put last so it is renderer above the others
+			Bomberman{4, 4, mainWindow.getRenderer(), &map, true } };//The player is put last so it is renderer above the others
 
 		map.addPlayers({ &players[0], &players[1], &players[2], &players[3] });
 

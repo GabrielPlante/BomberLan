@@ -56,9 +56,15 @@ TileProperty Map::checkNextTile(std::array<int,2> playerTilePosition, Direction 
 }
 
 bool Map::destroyTile(std::array<int, 2> tilePosition) {
-	for (auto it = players.begin(); it != players.end(); ++it)
+	for (auto it = players.begin(); it != players.end(); ++it) {
 		if ((**it).getTilePosition() == tilePosition)
 			(**it).die();
+		std::vector<std::shared_ptr<Bomb>>* bombs = (**it).getBombs();
+		for (auto id = bombs->begin(); id != bombs->end(); ++id) {
+			if ((**id).getTilePosition() == tilePosition)
+				(**id).explode();
+		}
+	}
 	if (tilePosition[0] >= 0 && tilePosition[0] < mapSize && tilePosition[1] >= 0 && tilePosition[1] < mapSize) {
 		if (tiles[tilePosition[0] + tilePosition[1] * mapSize]->isDestroyable()) {
 			tiles[tilePosition[0] + tilePosition[1] * mapSize] = std::unique_ptr<Tiles>{ new Path(tilePosition[0] * 35,tilePosition[1] * 35,gRenderer) };
