@@ -2,6 +2,8 @@
 #include "Renderable.h"
 #include "Map.h"
 
+class Map;//Because of recursive inclusion
+
 class Bomb :
 	public Renderable
 {

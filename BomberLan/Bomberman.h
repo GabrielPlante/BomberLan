@@ -3,6 +3,9 @@
 #include "Map.h"
 #include "Bomb.h"
 
+class Map;//Because of recursive inclusion
+class Bomb;
+
 class Bomberman : public Renderable
 {
 public:
@@ -11,12 +14,14 @@ public:
 	bool refresh() override;
 	void move(Direction direction);
 	void dropBomb();
+	void die();
 	~Bomberman();
 private:
 	Map* map;
 	std::vector<std::unique_ptr<Bomb>> droppedBomb;
 	SDL_Renderer* gRenderer;//To drop bomb
-	int nbrOfBomb;
-	int bombPower;
+	int nbrOfBomb = 1;
+	int bombPower = 1;
+	bool alive = true;
 };
 

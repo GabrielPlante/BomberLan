@@ -7,15 +7,14 @@ Bomberman::Bomberman(int xTile, int yTile, SDL_Renderer* gRenderer, Map* map)
 {
 	this->map = map;
 	this->gRenderer = gRenderer;
-	nbrOfBomb = 1;
-	bombPower = 10;
 }
 
 void Bomberman::renderCopy() {
 	for (auto it = droppedBomb.begin(); it != droppedBomb.end(); ++it) {
 		(**it).renderCopy(gRenderer);
 	}
-	Renderable::renderCopy(gRenderer);
+	if (alive)
+		Renderable::renderCopy(gRenderer);
 }
 
 bool Bomberman::refresh() {
@@ -40,14 +39,20 @@ void Bomberman::move(Direction direction) {
 }
 
 void Bomberman::dropBomb() {
-	bool drop = true;
-	for (auto it = droppedBomb.begin(); it != droppedBomb.end(); ++it)
-		if ((**it).getTilePosition() == getTilePosition())
-			drop = false;
-	if (drop) {
-		std::unique_ptr<Bomb> bomb{ new Bomb(getTilePosition()[0], getTilePosition()[1], bombPower, gRenderer, map) };
-		droppedBomb.push_back(std::move(bomb));
+	if (alive) {
+		bool drop = true;
+		for (auto it = droppedBomb.begin(); it != droppedBomb.end(); ++it)
+			if ((**it).getTilePosition() == getTilePosition())
+				drop = false;
+		if (drop) {
+			std::unique_ptr<Bomb> bomb{ new Bomb(getTilePosition()[0], getTilePosition()[1], bombPower, gRenderer, map) };
+			droppedBomb.push_back(std::move(bomb));
+		}
 	}
+}
+
+void Bomberman::die() {
+	alive = false;
 }
 
 Bomberman::~Bomberman()

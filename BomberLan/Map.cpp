@@ -18,6 +18,10 @@ Map::Map(SDL_Renderer* gRenderer)
 	}
 }
 
+void Map::addPlayers(std::array<Bomberman*, 4> players) {
+	this->players = players;
+}
+
 //To render the whole map on the screen, must be called each frame
 void Map::renderCopy(SDL_Renderer* gRenderer) {
 	for (auto it = tiles.begin(); it != tiles.end();++it) {
@@ -52,6 +56,9 @@ TileProperty Map::checkNextTile(std::array<int,2> playerTilePosition, Direction 
 }
 
 bool Map::destroyTile(std::array<int, 2> tilePosition) {
+	for (auto it = players.begin(); it != players.end(); ++it)
+		if ((**it).getTilePosition() == tilePosition)
+			(**it).die();
 	if (tilePosition[0] >= 0 && tilePosition[0] < mapSize && tilePosition[1] >= 0 && tilePosition[1] < mapSize) {
 		if (tiles[tilePosition[0] + tilePosition[1] * mapSize]->isDestroyable()) {
 			tiles[tilePosition[0] + tilePosition[1] * mapSize] = std::unique_ptr<Tiles>{ new Path(tilePosition[0] * 35,tilePosition[1] * 35,gRenderer) };

@@ -19,6 +19,7 @@ bool Bomb::refresh() {
 }
 
 void Bomb::explode() {
+	map->destroyTile(getTilePosition());//Destroy the actual tile (to kill players)
 	for (int i = 0; i != 4; ++i) {//For every direction
 		bool x = false;
 		for (int j = 1; j != power+1 && !x; ++j) {
