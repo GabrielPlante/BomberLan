@@ -64,6 +64,8 @@ bool Map::destroyTile(std::array<int, 2> tilePosition) {
 			tiles[tilePosition[0] + tilePosition[1] * mapSize] = std::unique_ptr<Tiles>{ new Path(tilePosition[0] * 35,tilePosition[1] * 35,gRenderer) };
 			return true;
 		}
+		if (!tiles[tilePosition[0] + tilePosition[1] * mapSize]->isWalkable())//Check for invicible block
+			return true;
 	}
 	return false;
 }
