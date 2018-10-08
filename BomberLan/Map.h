@@ -15,7 +15,7 @@ public:
 	Map(SDL_Renderer* gRenderer);
 	void addPlayers(std::array<Bomberman*, 4> players);
 	void renderCopy(SDL_Renderer* gRenderer);
-	TileProperty checkNextTile(std::array<int,2> playerTilePosition, Direction direction);
+	TileProperty checkNextTile(std::array<int,2> playerTilePosition, Direction direction = NOT);
 	bool destroyTile(std::array<int,2> tilePosition);
 	~Map();
 private:

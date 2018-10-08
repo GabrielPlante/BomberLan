@@ -19,25 +19,29 @@ void Bomb::renderCopy(SDL_Renderer* gRenderer) {
 				SDL_Rect explosion;
 				switch (i)//GL HF
 				{
-				case 0: if (map->checkNextTile({ getTilePosition()[0],getTilePosition()[1] - j + 1 }, TOP) != WALKABLE) {
+				case 0: if (map->checkNextTile({ getTilePosition()[0],getTilePosition()[1] - j + 1 }, TOP) != WALKABLE
+					&& map->checkNextTile({ getTilePosition()[0],getTilePosition()[1] - j + 1 }, TOP) != BOMB) {
 					x = true;
 					break;
 				}
 					explosion.x = getTilePosition()[0] * 35 + 35 / 2 - 35 / 8; explosion.y = (getTilePosition()[1] - j) * 35;
 					explosion.w = 35 / 4; explosion.h = 35; break;
-				case 1: if (map->checkNextTile({ getTilePosition()[0] - j + 1,getTilePosition()[1]}, LEFT) != WALKABLE) {
+				case 1: if (map->checkNextTile({ getTilePosition()[0] - j + 1,getTilePosition()[1]}, LEFT) != WALKABLE
+					&& map->checkNextTile({ getTilePosition()[0] - j + 1,getTilePosition()[1]}, LEFT) != BOMB) {
 					x = true;
 					break;
 				}
 					explosion.x = (getTilePosition()[0] - j) * 35; explosion.y = getTilePosition()[1] * 35 + 35 / 2 - 35 / 8;
 					explosion.w = 35; explosion.h = 35 / 4; break;
-				case 2: if (map->checkNextTile({ getTilePosition()[0],getTilePosition()[1] + j - 1 }, BOTTOM) != WALKABLE) {
+				case 2: if (map->checkNextTile({ getTilePosition()[0],getTilePosition()[1] + j - 1 }, BOTTOM) != WALKABLE
+					&& map->checkNextTile({ getTilePosition()[0],getTilePosition()[1] + j - 1 }, BOTTOM) != BOMB) {
 					x = true;
 					break;
 				}
 					explosion.x = getTilePosition()[0] * 35 + 35 / 2 - 35 / 8; explosion.y = (getTilePosition()[1] + j) * 35;
 					explosion.w = 35 / 4; explosion.h = 35; break;
-				case 3: if (map->checkNextTile({ getTilePosition()[0] + j - 1,getTilePosition()[1]}, RIGHT) != WALKABLE) {
+				case 3: if (map->checkNextTile({ getTilePosition()[0] + j - 1,getTilePosition()[1]}, RIGHT) != WALKABLE
+					&& map->checkNextTile({ getTilePosition()[0] + j - 1,getTilePosition()[1]}, RIGHT) != BOMB) {
 					x = true;
 					break;
 				}

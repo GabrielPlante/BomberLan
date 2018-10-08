@@ -31,7 +31,7 @@ void Map::renderCopy(SDL_Renderer* gRenderer) {
 
 TileProperty Map::checkNextTile(std::array<int,2> playerTilePosition, Direction direction) {
 	int x = -1;
-	switch (direction) {
+	switch (direction) {//Transform from {x, y} to position in array for every direction
 	case TOP:
 		if (playerTilePosition[1] != 0)
 			x = playerTilePosition[0] + (playerTilePosition[1] - 1) * mapSize;
@@ -48,9 +48,17 @@ TileProperty Map::checkNextTile(std::array<int,2> playerTilePosition, Direction 
 		if (playerTilePosition[0] != mapSize - 1)
 			x = playerTilePosition[0] + 1 + playerTilePosition[1] * mapSize;
 		break;
+	case NOT:
+		if (playerTilePosition[0] >= 0 && playerTilePosition[0] < mapSize && playerTilePosition[1] >= 0 && playerTilePosition[1] < mapSize)
+			x = playerTilePosition[0] + playerTilePosition[1] * mapSize;
 	}
 	if (x == -1) return INEXISTANT;
-	else if (tiles[x]->isWalkable()) return WALKABLE;
+	for (auto it = players.begin(); it != players.end(); ++it) {//Check if the next tile is a bomb
+		for (auto id = (**it).getBombs()->begin(); id != (**it).getBombs()->end(); ++id)
+			if ((**id).getTilePosition()[0] + (**id).getTilePosition()[1]*mapSize == x)
+				return BOMB;
+	}
+	if (tiles[x]->isWalkable()) return WALKABLE;
 	else if (tiles[x]->isDestroyable()) return DESTROYABLE;
 	else return NOTHING;
 }
@@ -65,7 +73,7 @@ bool Map::destroyTile(std::array<int, 2> tilePosition) {
 				(**id).explode();
 		}
 	}
-	if (tilePosition[0] >= 0 && tilePosition[0] < mapSize && tilePosition[1] >= 0 && tilePosition[1] < mapSize) {
+	if (tilePosition[0] >= 0 && tilePosition[0] < mapSize && tilePosition[1] >= 0 && tilePosition[1] < mapSize) {//Replace the tile
 		if (tiles[tilePosition[0] + tilePosition[1] * mapSize]->isDestroyable()) {
 			tiles[tilePosition[0] + tilePosition[1] * mapSize] = std::unique_ptr<Tiles>{ new Path(tilePosition[0] * 35,tilePosition[1] * 35,gRenderer) };
 			return true;

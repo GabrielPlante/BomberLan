@@ -17,7 +17,6 @@ void Bomberman::renderCopy() {
 	if (alive)
 		Renderable::renderCopy(gRenderer);
 }
-
 bool Bomberman::refresh() {
 	for (int i = 0; i != droppedBomb.size(); ++i) {//Couldn't get it to work nicely with iterator
 		if (!droppedBomb[i]->refresh()) {
@@ -41,6 +40,7 @@ bool Bomberman::refresh() {
 	return true;
 }
 
+//To not move on a bomb, check in move() if the next tile have a bomb on it (every player, every bomb)
 void Bomberman::move() {
 	if (inputDirection != NOT && map->checkNextTile(getTilePosition(), movingDirection) == WALKABLE) {//If the player walk freely
 		switch (movingDirection) {
