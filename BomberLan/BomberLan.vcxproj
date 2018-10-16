@@ -126,6 +126,7 @@
     <ClCompile Include="Bomberman.cpp" />
     <ClCompile Include="Brick.cpp" />
     <ClCompile Include="Event.cpp" />
+    <ClCompile Include="Item.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Path.cpp" />
@@ -139,6 +140,7 @@
     <ClInclude Include="Brick.h" />
     <ClInclude Include="Enum.h" />
     <ClInclude Include="Event.h" />
+    <ClInclude Include="Item.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Path.h" />
     <ClInclude Include="Renderable.h" />

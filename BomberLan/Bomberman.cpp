@@ -2,10 +2,10 @@
 
 
 
-Bomberman::Bomberman(int xTile, int yTile, SDL_Renderer* gRenderer, Map* map, bool isPlayer)
+Bomberman::Bomberman(int xTile, int yTile, SDL_Renderer* gRenderer, Map* map, int numPlayer)
 	:Renderable(xTile*35+35/2-18/2, yTile*35+35/2-36/2, 18, 36, "Bomberman.bmp", gRenderer)
 {
-	this->isPlayer = isPlayer;
+	this->numPlayer = numPlayer;
 	this->map = map;
 	this->gRenderer = gRenderer;
 }
@@ -24,14 +24,33 @@ bool Bomberman::refresh() {
 			--i;
 		}
 	}
-	if (isPlayer) {
+	ITEM item = map->takeItem(getTilePosition());
+	if (item == BOMBPLUS) {
+		++nbrOfBomb;
+	}
+	else if (item == POWERPLUS) {
+		++bombPower;
+	}
+	if (numPlayer) {
 		const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
-		if (currentKeyStates[SDL_SCANCODE_UP]) inputDirection = TOP;
-		else if (currentKeyStates[SDL_SCANCODE_LEFT]) inputDirection = LEFT;
-		else if (currentKeyStates[SDL_SCANCODE_DOWN]) inputDirection = BOTTOM;
-		else if (currentKeyStates[SDL_SCANCODE_RIGHT]) inputDirection = RIGHT;
-		else inputDirection = NOT;
-		if (currentKeyStates[SDL_SCANCODE_SPACE]) dropBomb();
+		switch (numPlayer) {
+		case 1:
+			if (currentKeyStates[SDL_SCANCODE_UP]) inputDirection = TOP;
+			else if (currentKeyStates[SDL_SCANCODE_LEFT]) inputDirection = LEFT;
+			else if (currentKeyStates[SDL_SCANCODE_DOWN]) inputDirection = BOTTOM;
+			else if (currentKeyStates[SDL_SCANCODE_RIGHT]) inputDirection = RIGHT;
+			else inputDirection = NOT;
+			if (currentKeyStates[SDL_SCANCODE_RSHIFT]) dropBomb();
+			break;
+		case 2:
+			if (currentKeyStates[SDL_SCANCODE_W]) inputDirection = TOP;
+			else if (currentKeyStates[SDL_SCANCODE_A]) inputDirection = LEFT;
+			else if (currentKeyStates[SDL_SCANCODE_S]) inputDirection = BOTTOM;
+			else if (currentKeyStates[SDL_SCANCODE_D]) inputDirection = RIGHT;
+			else inputDirection = NOT;
+			if (currentKeyStates[SDL_SCANCODE_SPACE]) dropBomb();
+			break;
+		}
 		if (inputDirection != NOT)
 			movingDirection = inputDirection;
 		move();

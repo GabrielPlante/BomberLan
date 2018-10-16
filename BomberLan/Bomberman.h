@@ -9,7 +9,7 @@ class Bomb;
 class Bomberman : public Renderable
 {
 public:
-	Bomberman(int xTile, int yTile, SDL_Renderer* gRenderer, Map* map, bool isPlayer);
+	Bomberman(int xTile, int yTile, SDL_Renderer* gRenderer, Map* map, int numPlayer = 0);
 	void renderCopy();
 	bool refresh() override;
 	void move();
@@ -22,9 +22,9 @@ private:
 	SDL_Renderer* gRenderer;//To drop bomb
 	Direction inputDirection = NOT;
 	Direction movingDirection = NOT;
-	bool isPlayer;
+	int numPlayer;
 	int movingSpeed = 1 ;
-	unsigned int nbrOfBomb = 10;
+	unsigned int nbrOfBomb = 1;
 	unsigned int bombPower = 1;
 	bool alive = true;
 };
