@@ -16,7 +16,7 @@ int main( int argc, char* args[] )
 
 		map.addPlayers({ &players[0], &players[1], &players[2], &players[3] });
 
-		Event event;
+		Event event({ &players[3],&players[2] });
 		while (event.checkEvent()) {//The game loop
 			mainWindow.clear();
 			map.renderCopy(mainWindow.getRenderer());

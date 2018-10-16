@@ -12,6 +12,7 @@ public:
 	Bomberman(int xTile, int yTile, SDL_Renderer* gRenderer, Map* map, int numPlayer = 0);
 	void renderCopy();
 	bool refresh() override;
+	void setInput(Direction input);
 	void move();
 	void dropBomb();
 	void die();

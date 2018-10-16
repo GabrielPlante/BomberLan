@@ -35,19 +35,15 @@ bool Bomberman::refresh() {
 		const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
 		switch (numPlayer) {
 		case 1:
-			if (currentKeyStates[SDL_SCANCODE_UP]) inputDirection = TOP;
-			else if (currentKeyStates[SDL_SCANCODE_LEFT]) inputDirection = LEFT;
-			else if (currentKeyStates[SDL_SCANCODE_DOWN]) inputDirection = BOTTOM;
-			else if (currentKeyStates[SDL_SCANCODE_RIGHT]) inputDirection = RIGHT;
-			else inputDirection = NOT;
+			if (!currentKeyStates[SDL_SCANCODE_UP] && !currentKeyStates[SDL_SCANCODE_LEFT]
+				&& !currentKeyStates[SDL_SCANCODE_DOWN] && !currentKeyStates[SDL_SCANCODE_RIGHT])
+				inputDirection = NOT;
 			if (currentKeyStates[SDL_SCANCODE_RSHIFT]) dropBomb();
 			break;
 		case 2:
-			if (currentKeyStates[SDL_SCANCODE_W]) inputDirection = TOP;
-			else if (currentKeyStates[SDL_SCANCODE_A]) inputDirection = LEFT;
-			else if (currentKeyStates[SDL_SCANCODE_S]) inputDirection = BOTTOM;
-			else if (currentKeyStates[SDL_SCANCODE_D]) inputDirection = RIGHT;
-			else inputDirection = NOT;
+			if (!currentKeyStates[SDL_SCANCODE_W] && !currentKeyStates[SDL_SCANCODE_A]
+				&& !currentKeyStates[SDL_SCANCODE_S] && !currentKeyStates[SDL_SCANCODE_D])
+				inputDirection = NOT;
 			if (currentKeyStates[SDL_SCANCODE_SPACE]) dropBomb();
 			break;
 		}
@@ -57,6 +53,10 @@ bool Bomberman::refresh() {
 	}
 	if (!alive) return false;
 	return true;
+}
+
+void Bomberman::setInput(Direction input) {
+	inputDirection = input;
 }
 
 //To not move on a bomb, check in move() if the next tile have a bomb on it (every player, every bomb)

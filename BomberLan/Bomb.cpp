@@ -56,13 +56,19 @@ void Bomb::renderCopy(SDL_Renderer* gRenderer) {
 }
 
 bool Bomb::refresh() {
-	if (SDL_GetTicks() > dropTime + 2000) {//2 sec before explosion
+	if (SDL_GetTicks() > dropTime + lastingTime) {//2 sec before explosion
 		if (!explosionTime)
 			explode();
 		else if (SDL_GetTicks() > explosionTime + 100)//Explosion effect last 100 ms
 			return false;
 	}
 	return true;
+}
+
+void Bomb::shortTheTime() {
+	if (SDL_GetTicks() < dropTime + lastingTime - 80) {
+		lastingTime = SDL_GetTicks() + 80 - dropTime;
+	}
 }
 
 void Bomb::explode() {
