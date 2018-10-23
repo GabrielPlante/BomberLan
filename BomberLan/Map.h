@@ -1,6 +1,7 @@
 #pragma once
 #include "Path.h"
 #include "Brick.h"
+#include "Wall.h"
 #include <vector>
 #include <memory>
 #include "Enum.h"

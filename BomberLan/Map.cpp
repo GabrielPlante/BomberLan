@@ -4,21 +4,26 @@
 
 Map::Map(SDL_Renderer* gRenderer)
 {
+	srand(time(NULL));
 	this->gRenderer = gRenderer;
 	//Temporary : map full of path
 	for (int y = 0; y != mapSize; ++y) {//Creating the map left to right and top to bottom (in this order)
 		for (int x = 0; x != mapSize; ++x) {
-			if (x == 4 || x == 13 || y == 4 || y == 13) {
+			int random = rand() % 4;
+			if (random == 0) {
 				std::unique_ptr<Tiles> tile(new Path(x * 35, y * 35, gRenderer));
 				tiles.push_back(std::move(tile));
 			}
-			else {
+			else if (random == 1 || random == 2){
 				std::unique_ptr<Tiles> tile(new Brick(x * 35, y * 35, gRenderer));
+				tiles.push_back(std::move(tile));
+			}
+			else {
+				std::unique_ptr<Tiles> tile(new Wall(x * 35, y * 35, gRenderer));
 				tiles.push_back(std::move(tile));
 			}
 		}
 	}
-	srand(time(NULL));
 }
 
 void Map::addPlayers(std::array<Bomberman*, 4> players) {
@@ -82,7 +87,7 @@ ITEM Map::takeItem(std::array<int, 2> tilePosition) {
 ///Return true if the explosion stop at that tile (aka the tile is a brick or a wall)
 bool Map::destroyTile(std::array<int, 2> tilePosition) {
 	for (auto it = players.begin(); it != players.end(); ++it) {
-		if ((**it).getTilePosition() == tilePosition)
+		if ((**it).getTilePosition() == tilePosition && SDL_GetTicks() > 10000)
 			(**it).die();
 		std::vector<std::shared_ptr<Bomb>>* bombs = (**it).getBombs();
 		for (auto id = bombs->begin(); id != bombs->end(); ++id) {

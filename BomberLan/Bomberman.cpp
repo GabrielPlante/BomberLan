@@ -8,6 +8,9 @@ Bomberman::Bomberman(int xTile, int yTile, SDL_Renderer* gRenderer, Map* map, in
 	this->numPlayer = numPlayer;
 	this->map = map;
 	this->gRenderer = gRenderer;
+	positionX = getPosition()->x;
+	positionY = getPosition()->y;
+	destination = getTilePosition();
 }
 
 void Bomberman::renderCopy() {
@@ -34,11 +37,11 @@ bool Bomberman::refresh() {
 	if (numPlayer) {
 		const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
 		switch (numPlayer) {
-		case 1:
+		case 1://If it's the first player...
 			if (!currentKeyStates[SDL_SCANCODE_UP] && !currentKeyStates[SDL_SCANCODE_LEFT]
 				&& !currentKeyStates[SDL_SCANCODE_DOWN] && !currentKeyStates[SDL_SCANCODE_RIGHT])
-				inputDirection = NOT;
-			if (currentKeyStates[SDL_SCANCODE_RSHIFT]) dropBomb();
+				inputDirection = NOT;//Only check if the player is not pressing any key
+			if (currentKeyStates[SDL_SCANCODE_RSHIFT]) dropBomb();//Or is dropping a bomb
 			break;
 		case 2:
 			if (!currentKeyStates[SDL_SCANCODE_W] && !currentKeyStates[SDL_SCANCODE_A]
@@ -47,8 +50,6 @@ bool Bomberman::refresh() {
 			if (currentKeyStates[SDL_SCANCODE_SPACE]) dropBomb();
 			break;
 		}
-		if (inputDirection != NOT)
-			movingDirection = inputDirection;
 		move();
 	}
 	if (!alive) return false;
@@ -59,44 +60,40 @@ void Bomberman::setInput(Direction input) {
 	inputDirection = input;
 }
 
-//To not move on a bomb, check in move() if the next tile have a bomb on it (every player, every bomb)
+///Move a bomberman
 void Bomberman::move() {
-	if (inputDirection != NOT && map->checkNextTile(getTilePosition(), movingDirection) == WALKABLE) {//If the player walk freely
-		switch (movingDirection) {
-		case TOP: position.y -= movingSpeed; break;
-		case LEFT: position.x -= movingSpeed; break;
-		case BOTTOM: position.y += movingSpeed; break;
-		case RIGHT: position.x += movingSpeed; break;
+	Uint16 delta = SDL_GetTicks() - timeLastFrame;//To make movement speed independant of framerate
+	timeLastFrame = SDL_GetTicks();
+	if (inputDirection != NOT && map->checkNextTile(getTilePosition(), inputDirection) == WALKABLE) {
+		switch (inputDirection)//If the player want to move
+		{//Every direction
+		case TOP: destination = getTilePosition(); destination[1] = getTilePosition()[1] - 1; break;//Don't accumulate move
+		case LEFT: destination = getTilePosition(); destination[0] = getTilePosition()[0] - 1; break;
+		case BOTTOM: destination = getTilePosition(); destination[1] = getTilePosition()[1] + 1; break;
+		case RIGHT: destination = getTilePosition(); destination[0] = getTilePosition()[0] + 1; break;
+		}
+		if (inputDirection == TOP || inputDirection == BOTTOM) {//Recenter if the player change direction
+			if (getTilePosition()[0] * 35 + 35 / 4 >= getPosition()->x)
+				positionX += movingSpeed * delta;
+			if (getTilePosition()[0] * 35 + 35 / 4 <= getPosition()->x)
+				positionX -= movingSpeed * delta;
+		}
+		else if (inputDirection == LEFT || inputDirection == RIGHT) {
+			if (getTilePosition()[1] * 35 - 35 / 4 >= getPosition()->y)
+				positionY += movingSpeed * delta;
+			if (getTilePosition()[1] * 35 - 35 / 4 <= getPosition()->y)
+				positionY -= movingSpeed * delta;
 		}
 	}
-	else if (inputDirection != NOT) inputDirection = NOT;//So you can enter a tile where the next one is non walkable
-	//To recenter the player and to make "one tap to move" possible
-	if (position.y > getTilePosition()[1] * 35 && inputDirection != TOP && inputDirection != BOTTOM) {
-		if (inputDirection == NOT && movingDirection == BOTTOM) position.y+=movingSpeed;
-		else {
-			position.y-=movingSpeed; movingDirection = NOT;
-		}
+	else
+		recenter(delta);//If the player is not moving, recenter him
+	if (getTilePosition() != destination) {//Apply the movement to the float
+		positionX += (destination[0] - getTilePosition()[0])*movingSpeed*delta;
+		positionY += (destination[1] - getTilePosition()[1])*movingSpeed*delta;
 	}
-	else if (position.x - position.w / 2 > getTilePosition()[0] * 35 && inputDirection != LEFT && inputDirection != RIGHT) {
-		if (inputDirection == NOT && movingDirection == RIGHT) position.x+=movingSpeed;
-		else {
-			position.x-=movingSpeed; movingDirection = NOT;
-		}
-	}
-	else if (position.y < getTilePosition()[1] * 35 && inputDirection != TOP && inputDirection != BOTTOM) {
-		if (inputDirection == NOT && movingDirection == TOP) position.y-=movingSpeed;
-		else {
-			position.y+=movingSpeed; movingDirection = NOT;
-		}
-	}
-	else if (position.x - position.w / 2 < getTilePosition()[0] * 35 && inputDirection != LEFT && inputDirection != RIGHT) {
-		if (inputDirection == NOT && movingDirection == LEFT) position.x-=movingSpeed;
-		else {
-			position.x+=movingSpeed; movingDirection = NOT;
-		}
-	}
-	else if (inputDirection == NOT)
-		movingDirection = NOT;
+
+	position.x = positionX;//Apply the movement to the real position
+	position.y = positionY;
 }
 
 void Bomberman::dropBomb() {
@@ -112,7 +109,18 @@ void Bomberman::dropBomb() {
 	}
 }
 
-void Bomberman::die() {
+void Bomberman::recenter(Uint16 delta) {//Move the player toward the center of the tile
+	if (getTilePosition()[0] * 35 + 35/4 >= getPosition()->x)
+		positionX += movingSpeed * delta;
+	if (getTilePosition()[0] * 35 + 35/4 <= getPosition()->x)
+		positionX -= movingSpeed * delta;
+	if (getTilePosition()[1] * 35 - 35/4 >= getPosition()->y)
+		positionY += movingSpeed * delta;
+	if (getTilePosition()[1] * 35 - 35/4 <= getPosition()->y)
+		positionY -= movingSpeed * delta;
+}
+
+void Bomberman::die() {//So simple
 	alive = false;
 }
 

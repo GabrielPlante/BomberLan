@@ -132,6 +132,7 @@
     <ClCompile Include="Path.cpp" />
     <ClCompile Include="Renderable.cpp" />
     <ClCompile Include="Tiles.cpp" />
+    <ClCompile Include="Wall.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -145,6 +146,7 @@
     <ClInclude Include="Path.h" />
     <ClInclude Include="Renderable.h" />
     <ClInclude Include="Tiles.h" />
+    <ClInclude Include="Wall.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

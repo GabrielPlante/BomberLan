@@ -15,6 +15,7 @@ public:
 	void setInput(Direction input);
 	void move();
 	void dropBomb();
+	void recenter(Uint16 delta);
 	void die();
 	std::vector<std::shared_ptr<Bomb>>* getBombs();
 private:
@@ -22,11 +23,14 @@ private:
 	std::vector<std::shared_ptr<Bomb>> droppedBomb;
 	SDL_Renderer* gRenderer;//To drop bomb
 	Direction inputDirection = NOT;
-	Direction movingDirection = NOT;
+	std::array<int, 2> destination;
 	int numPlayer;
-	int movingSpeed = 1 ;
+	float movingSpeed = .2;
 	unsigned int nbrOfBomb = 1;
 	unsigned int bombPower = 1;
+	float positionY;
+	float positionX;
 	bool alive = true;
+	Uint32 timeLastFrame = 0;
 };
 
