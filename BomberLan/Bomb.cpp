@@ -2,8 +2,8 @@
 
 
 
-Bomb::Bomb(int xTile, int yTile, int power, SDL_Renderer* gRenderer, Map* map)
-	: Renderable(xTile*35+35/2-28/2, yTile*35+35/2-28/2, 28, 28, "Bomb.bmp", gRenderer)
+Bomb::Bomb(int xTile, int yTile, int power, Map* map, COLOR color)
+	: Rect(xTile*35+35/2-28/2, yTile*35+35/2-28/2, 28, 28, color)
 {
 	this->map = map;
 	dropTime = SDL_GetTicks();
@@ -11,7 +11,7 @@ Bomb::Bomb(int xTile, int yTile, int power, SDL_Renderer* gRenderer, Map* map)
 }
 
 void Bomb::renderCopy(SDL_Renderer* gRenderer) {
-	if (!explosionTime) Renderable::renderCopy(gRenderer);
+	if (!explosionTime) Rect::renderCopy(gRenderer);
 	else if (SDL_GetTicks() < explosionTime + 100) {
 		for (int i = 0; i != 4; ++i) {//For every direction
 			bool x = false;//We need to stop the explosion at the first non-walkable block
@@ -19,42 +19,39 @@ void Bomb::renderCopy(SDL_Renderer* gRenderer) {
 				SDL_Rect explosion;
 				switch (i)//GL HF
 				{
-				case 0: if (map->checkNextTile({ getTilePosition()[0],getTilePosition()[1] - j + 1 }, TOP) != WALKABLE
-					&& map->checkNextTile({ getTilePosition()[0],getTilePosition()[1] - j + 1 }, TOP) != BOMB) {
+				case 0: if (map->checkNextTile({ getTilePosition()[0],getTilePosition()[1] - j + 1 }, TOP) != WALKABLE){
 					x = true;
 					break;
 				}
 					explosion.x = getTilePosition()[0] * 35 + 35 / 2 - 35 / 8; explosion.y = (getTilePosition()[1] - j) * 35;
 					explosion.w = 35 / 4; explosion.h = 35; break;
-				case 1: if (map->checkNextTile({ getTilePosition()[0] - j + 1,getTilePosition()[1]}, LEFT) != WALKABLE
-					&& map->checkNextTile({ getTilePosition()[0] - j + 1,getTilePosition()[1]}, LEFT) != BOMB) {
+				case 1: if (map->checkNextTile({ getTilePosition()[0] - j + 1,getTilePosition()[1]}, LEFT) != WALKABLE){
 					x = true;
 					break;
 				}
 					explosion.x = (getTilePosition()[0] - j) * 35; explosion.y = getTilePosition()[1] * 35 + 35 / 2 - 35 / 8;
 					explosion.w = 35; explosion.h = 35 / 4; break;
-				case 2: if (map->checkNextTile({ getTilePosition()[0],getTilePosition()[1] + j - 1 }, BOTTOM) != WALKABLE
-					&& map->checkNextTile({ getTilePosition()[0],getTilePosition()[1] + j - 1 }, BOTTOM) != BOMB) {
+				case 2: if (map->checkNextTile({ getTilePosition()[0],getTilePosition()[1] + j - 1 }, BOTTOM) != WALKABLE){
 					x = true;
 					break;
 				}
 					explosion.x = getTilePosition()[0] * 35 + 35 / 2 - 35 / 8; explosion.y = (getTilePosition()[1] + j) * 35;
 					explosion.w = 35 / 4; explosion.h = 35; break;
-				case 3: if (map->checkNextTile({ getTilePosition()[0] + j - 1,getTilePosition()[1]}, RIGHT) != WALKABLE
-					&& map->checkNextTile({ getTilePosition()[0] + j - 1,getTilePosition()[1]}, RIGHT) != BOMB) {
+				case 3: if (map->checkNextTile({ getTilePosition()[0] + j - 1,getTilePosition()[1]}, RIGHT) != WALKABLE){
 					x = true;
 					break;
 				}
 					explosion.x = (getTilePosition()[0] + j) * 35; explosion.y = getTilePosition()[1] * 35 + 35 / 2 - 35 / 8;
 					explosion.w = 35; explosion.h = 35 / 4; break;
 				}
-				SDL_SetRenderDrawColor(gRenderer, 0x00, 0x00, 0xFF, 0xFF);
+				setRenderDrawColor(gRenderer, getColor());//Set the good color
 				SDL_RenderFillRect(gRenderer, &explosion);
 			}
 		}
 	}
 }
 
+///return true if the bomb still exist, or else false
 bool Bomb::refresh() {
 	if (SDL_GetTicks() > dropTime + lastingTime) {//2 sec before explosion
 		if (!explosionTime)

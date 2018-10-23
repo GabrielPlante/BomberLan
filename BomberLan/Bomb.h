@@ -1,14 +1,14 @@
 #pragma once
-#include "Renderable.h"
+#include "Rect.h"
 #include "Map.h"
 
 class Map;//Because of recursive inclusion
 
 class Bomb :
-	public Renderable
+	public Rect
 {
 public:
-	Bomb(int xTile, int yTile, int power, SDL_Renderer* gRenderer, Map* map);
+	Bomb(int xTile, int yTile, int power, Map* map, COLOR color);
 	void renderCopy(SDL_Renderer* gRenderer);
 	bool refresh() override;
 	void shortTheTime();
@@ -21,4 +21,5 @@ private:
 	bool exploded = false;
 	int lastingTime = 2000;
 	int power;
+	COLOR color;
 };

@@ -1,21 +1,13 @@
 #pragma once
-#include <SDL.h>
-#include <iostream>
-#include <stdexcept>
-#include <array>
-class Renderable
+#include "Rect.h"
+class Renderable : public Rect
 {
 public:
 	Renderable(int x, int y, int w, int h, std::string path, SDL_Renderer* gRenderer);
-	void renderCopy(SDL_Renderer* gRenderer);
-	virtual bool refresh() = 0;
-	std::array<int, 2> getTilePosition();
+	void renderCopy(SDL_Renderer* gRenderer) override;
 	SDL_Texture* getTexture();
-	SDL_Rect* getPosition();
 	~Renderable();
 private:
 	SDL_Texture* texture = nullptr;
-protected:
-	SDL_Rect position;
 };
 

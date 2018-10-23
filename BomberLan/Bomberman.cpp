@@ -1,9 +1,7 @@
 #include "Bomberman.h"
 
-
-
-Bomberman::Bomberman(int xTile, int yTile, SDL_Renderer* gRenderer, Map* map, int numPlayer)
-	:Renderable(xTile*35+35/2-18/2, yTile*35+35/2-36/2, 18, 36, "Bomberman.bmp", gRenderer)
+Bomberman::Bomberman(int xTile, int yTile, SDL_Renderer* gRenderer, Map* map, COLOR color, int numPlayer)
+	:Rect(xTile*35+35/2-18/2, yTile*35+35/2-36/2, 18, 36, color)
 {
 	this->numPlayer = numPlayer;
 	this->map = map;
@@ -17,8 +15,9 @@ void Bomberman::renderCopy() {
 	for (auto it = droppedBomb.begin(); it != droppedBomb.end(); ++it) {
 		(**it).renderCopy(gRenderer);
 	}
-	if (alive)
-		Renderable::renderCopy(gRenderer);
+	if (alive) {
+		Rect::renderCopy(gRenderer);
+	}
 }
 bool Bomberman::refresh() {
 	for (int i = 0; i != droppedBomb.size(); ++i) {//Couldn't get it to work nicely with iterator
@@ -85,7 +84,7 @@ void Bomberman::move() {
 				positionY -= movingSpeed * delta;
 		}
 	}
-	else
+	else if (getTilePosition() == destination)
 		recenter(delta);//If the player is not moving, recenter him
 	if (getTilePosition() != destination) {//Apply the movement to the float
 		positionX += (destination[0] - getTilePosition()[0])*movingSpeed*delta;
@@ -103,7 +102,7 @@ void Bomberman::dropBomb() {
 			if ((**it).getTilePosition() == getTilePosition())
 				drop = false;
 		if (drop) {
-			std::shared_ptr<Bomb> bomb{ new Bomb(getTilePosition()[0], getTilePosition()[1], bombPower, gRenderer, map) };
+			std::shared_ptr<Bomb> bomb{ new Bomb(getTilePosition()[0], getTilePosition()[1], bombPower, map, getColor()) };
 			droppedBomb.push_back(std::move(bomb));
 		}
 	}

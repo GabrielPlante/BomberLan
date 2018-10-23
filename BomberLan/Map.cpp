@@ -91,8 +91,10 @@ bool Map::destroyTile(std::array<int, 2> tilePosition) {
 			(**it).die();
 		std::vector<std::shared_ptr<Bomb>>* bombs = (**it).getBombs();
 		for (auto id = bombs->begin(); id != bombs->end(); ++id) {
-			if ((**id).getTilePosition() == tilePosition)
+			if ((**id).getTilePosition() == tilePosition) {
 				(**id).shortTheTime();
+				return true;
+			}
 		}
 	}
 	if (tilePosition[0] >= 0 && tilePosition[0] < mapSize && tilePosition[1] >= 0 && tilePosition[1] < mapSize) {//Replace the tile

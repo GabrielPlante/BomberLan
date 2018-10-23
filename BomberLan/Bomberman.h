@@ -6,10 +6,10 @@
 class Map;//Because of recursive inclusion
 class Bomb;
 
-class Bomberman : public Renderable
+class Bomberman : public Rect
 {
 public:
-	Bomberman(int xTile, int yTile, SDL_Renderer* gRenderer, Map* map, int numPlayer = 0);
+	Bomberman(int xTile, int yTile, SDL_Renderer* gRenderer, Map* map, COLOR color, int numPlayer = 0);
 	void renderCopy();
 	bool refresh() override;
 	void setInput(Direction input);

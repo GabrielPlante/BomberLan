@@ -4,7 +4,6 @@
 #include "Wall.h"
 #include <vector>
 #include <memory>
-#include "Enum.h"
 #include "Item.h"
 #include "Bomberman.h"
 
