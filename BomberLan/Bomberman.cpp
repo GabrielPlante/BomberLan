@@ -91,8 +91,7 @@ void Bomberman::move() {
 		positionY += (destination[1] - getTilePosition()[1])*movingSpeed*delta;
 	}
 
-	position.x = positionX;//Apply the movement to the real position
-	position.y = positionY;
+	setPosition(positionX, positionY);//Apply the movement to the real position
 }
 
 void Bomberman::dropBomb() {

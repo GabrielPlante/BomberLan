@@ -25,7 +25,6 @@ void Window::clear() {
 }
 void Window::update() {
 	SDL_RenderPresent(gRenderer);
-	SDL_Delay(1);
 }
 SDL_Renderer* Window::getRenderer() {
 	return gRenderer;

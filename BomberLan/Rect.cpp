@@ -15,30 +15,32 @@ void Rect::renderCopy(SDL_Renderer* gRenderer) {
 	SDL_RenderFillRect(gRenderer, &position);
 }
 
-void Rect::setRenderDrawColor(SDL_Renderer* gRenderer, COLOR color) {
+void Rect::setRenderDrawColor(SDL_Renderer* gRenderer, COLOR color, int offsetR, int offsetG, int offsetB) {
 	switch (color)
 	{//Set the good code for each color
 	case RED:
-		SDL_SetRenderDrawColor(gRenderer, 0xFF, 0x00, 0x00, 0xFF);
+		SDL_SetRenderDrawColor(gRenderer, 255-offsetR, 0+offsetG, 0+offsetB, 255);
 		break;
 	case GREEN:
-		SDL_SetRenderDrawColor(gRenderer, 0x00, 0xFF, 0x00, 0xFF);
+		SDL_SetRenderDrawColor(gRenderer, 0+offsetR, 255-offsetG, 0+offsetG, 255);
 		break;
 	case BLUE:
-		SDL_SetRenderDrawColor(gRenderer, 0x00, 0x00, 0xFF, 0xFF);
+		SDL_SetRenderDrawColor(gRenderer, 0+offsetR, 0+offsetG, 255-offsetG, 255);
 		break;
 	case YELLOW:
-		SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0x00, 0xFF);
+		SDL_SetRenderDrawColor(gRenderer, 255-offsetR, 255-offsetG, 0+offsetG, 255);
 		break;
 	case ORANGE:
-		SDL_SetRenderDrawColor(gRenderer, 0xFF, 160, 0x00, 0xFF);
+		SDL_SetRenderDrawColor(gRenderer, 255-offsetR, 160+offsetG, 0+offsetG, 255);
 		break;
 	case BLACK:
-		SDL_SetRenderDrawColor(gRenderer, 0x00, 0x00, 0x00, 0xFF);
+		SDL_SetRenderDrawColor(gRenderer, 0+offsetR, 0+offsetG, 0+offsetG, 255);
 		break;
 	case WHITE:
-		SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
+		SDL_SetRenderDrawColor(gRenderer, 255-offsetR, 255-offsetG, 255-offsetG, 255);
 		break;
+	case PURPLE:
+		SDL_SetRenderDrawColor(gRenderer, 128+offsetR, 0+offsetG, 128+offsetG, 255);
 	}
 }
 
@@ -48,6 +50,11 @@ std::array<int, 2> Rect::getTilePosition() {
 
 SDL_Rect* Rect::getPosition() {
 	return &position;
+}
+
+void Rect::setPosition(int x, int y) {
+	position.x = x;
+	position.y = y;
 }
 
 COLOR Rect::getColor() {

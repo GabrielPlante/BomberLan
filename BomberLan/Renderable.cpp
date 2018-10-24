@@ -16,7 +16,7 @@ Renderable::Renderable(int x, int y, int w, int h, std::string path, SDL_Rendere
 }
 
 void Renderable::renderCopy(SDL_Renderer* gRenderer) {
-	SDL_RenderCopy(gRenderer, texture, nullptr, &position);
+	SDL_RenderCopy(gRenderer, texture, nullptr, getPosition());
 }
 
 SDL_Texture* Renderable::getTexture() {

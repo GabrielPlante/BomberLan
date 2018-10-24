@@ -28,8 +28,6 @@ private:
 	float movingSpeed = .2;
 	unsigned int nbrOfBomb = 1;
 	unsigned int bombPower = 1;
-	float positionY;
-	float positionX;
 	bool alive = true;
 	Uint32 timeLastFrame = 0;
 };

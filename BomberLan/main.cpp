@@ -15,6 +15,8 @@ int main( int argc, char* args[] )
 			Bomberman{4, 4, mainWindow.getRenderer(), &map, BLUE, 1} };//The player is put last so it is renderer above the others
 
 		map.addPlayers({ &players[0], &players[1], &players[2], &players[3] });
+		Uint32 timeLastFrame = SDL_GetTicks();
+		int countFrame = 0;
 
 		Event event({ &players[3],&players[2] });
 		while (event.checkEvent()) {//The game loop
@@ -25,6 +27,14 @@ int main( int argc, char* args[] )
 			for (auto it = players.begin(); it != players.end(); ++it)
 				it->renderCopy();
 			mainWindow.update();
+			if (SDL_GetTicks() - timeLastFrame < 10)//To limit the framerate to 100
+				SDL_Delay(10 - (SDL_GetTicks() - timeLastFrame));
+			if (SDL_GetTicks() / 1000 != timeLastFrame / 1000) {
+				std::cout << countFrame << std::endl;//Print the fps each second
+				countFrame = 0;
+			}
+			timeLastFrame = SDL_GetTicks();//Change variables
+			countFrame++;
 		}
 	}
 	catch (const std::runtime_error& e) {

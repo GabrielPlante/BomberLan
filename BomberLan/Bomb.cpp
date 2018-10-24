@@ -49,6 +49,8 @@ void Bomb::renderCopy(SDL_Renderer* gRenderer) {
 			}
 		}
 	}
+	for (auto it = particleList.begin(); it != particleList.end(); ++it)
+		(**it).Particle::renderCopy(gRenderer);
 }
 
 ///return true if the bomb still exist, or else false
@@ -58,6 +60,19 @@ bool Bomb::refresh() {
 			explode();
 		else if (SDL_GetTicks() > explosionTime + 100)//Explosion effect last 100 ms
 			return false;
+	}
+	else if (rand()%10==1){
+		for (int i = 0; i != (SDL_GetTicks() - dropTime) / 100; ++i) {//Add new particle
+			std::unique_ptr<Particle> particle{ new Particle(getPosition()->x, getPosition()->y, getColor()) };
+			particleList.push_back(std::move(particle));
+		}
+	}
+	auto it = particleList.begin();
+	while (it != particleList.end()){
+		if (!(**it).refresh()) {
+			it = particleList.erase(it);
+		}
+		else ++it;
 	}
 	return true;
 }
@@ -89,4 +104,5 @@ void Bomb::explode() {
 
 Bomb::~Bomb()
 {
+	particleList.clear();
 }
