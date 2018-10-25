@@ -6,8 +6,8 @@ Bomberman::Bomberman(int xTile, int yTile, SDL_Renderer* gRenderer, Map* map, CO
 	this->numPlayer = numPlayer;
 	this->map = map;
 	this->gRenderer = gRenderer;
-	positionX = getPosition()->x;
-	positionY = getPosition()->y;
+	positionX = static_cast<float>(getPosition()->x);
+	positionY = static_cast<float>(getPosition()->y);
 	destination = getTilePosition();
 }
 
@@ -18,6 +18,8 @@ void Bomberman::renderCopy() {
 	if (alive) {
 		Rect::renderCopy(gRenderer);
 	}
+	else
+		particleEmitter->renderCopy(gRenderer);
 }
 bool Bomberman::refresh() {
 	for (int i = 0; i != droppedBomb.size(); ++i) {//Couldn't get it to work nicely with iterator
@@ -51,7 +53,8 @@ bool Bomberman::refresh() {
 		}
 		move();
 	}
-	if (!alive) return false;
+	if (!alive && !particleEmitter->refresh())
+		return false;
 	return true;
 }
 
@@ -91,7 +94,7 @@ void Bomberman::move() {
 		positionY += (destination[1] - getTilePosition()[1])*movingSpeed*delta;
 	}
 
-	setPosition(positionX, positionY);//Apply the movement to the real position
+	applyPosition();
 }
 
 void Bomberman::dropBomb() {
@@ -120,6 +123,7 @@ void Bomberman::recenter(Uint16 delta) {//Move the player toward the center of t
 
 void Bomberman::die() {//So simple
 	alive = false;
+	particleEmitter = std::unique_ptr<ParticleEmitter>(new ParticleEmitter(getPosition()->x, getPosition()->y, 2000, 6, getColor(), 100));
 }
 
 std::vector<std::shared_ptr<Bomb>>* Bomberman::getBombs() {

@@ -17,7 +17,7 @@ Window::Window(const int screenWith, const int screenHeight)
 	if (gRenderer == nullptr)
 		throw std::runtime_error("SDL_CreateRenderer failed");
 	SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 255);
-
+	SDL_SetRenderDrawBlendMode(gRenderer, SDL_BLENDMODE_BLEND);
 }
 
 void Window::clear() {

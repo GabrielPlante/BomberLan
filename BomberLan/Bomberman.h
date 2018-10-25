@@ -2,6 +2,7 @@
 #include "Renderable.h"
 #include "Map.h"
 #include "Bomb.h"
+#include "ParticleEmitter.h"
 
 class Map;//Because of recursive inclusion
 class Bomb;
@@ -25,10 +26,11 @@ private:
 	Direction inputDirection = NOT;
 	std::array<int, 2> destination;
 	int numPlayer;
-	float movingSpeed = .2;
+	float movingSpeed = 0.2;
 	unsigned int nbrOfBomb = 1;
 	unsigned int bombPower = 1;
 	bool alive = true;
 	Uint32 timeLastFrame = 0;
+	std::unique_ptr<ParticleEmitter> particleEmitter;
 };
 

@@ -15,32 +15,32 @@ void Rect::renderCopy(SDL_Renderer* gRenderer) {
 	SDL_RenderFillRect(gRenderer, &position);
 }
 
-void Rect::setRenderDrawColor(SDL_Renderer* gRenderer, COLOR color, int offsetR, int offsetG, int offsetB) {
+void Rect::setRenderDrawColor(SDL_Renderer* gRenderer, COLOR color, int offsetR, int offsetG, int offsetB, int offsetA) {
 	switch (color)
 	{//Set the good code for each color
 	case RED:
-		SDL_SetRenderDrawColor(gRenderer, 255-offsetR, 0+offsetG, 0+offsetB, 255);
+		SDL_SetRenderDrawColor(gRenderer, 255-offsetR, 0+offsetG, 0+offsetB, 255-offsetA);
 		break;
 	case GREEN:
-		SDL_SetRenderDrawColor(gRenderer, 0+offsetR, 255-offsetG, 0+offsetG, 255);
+		SDL_SetRenderDrawColor(gRenderer, 0+offsetR, 255-offsetG, 0+offsetG, 255-offsetA);
 		break;
 	case BLUE:
-		SDL_SetRenderDrawColor(gRenderer, 0+offsetR, 0+offsetG, 255-offsetG, 255);
+		SDL_SetRenderDrawColor(gRenderer, 0+offsetR, 0+offsetG, 255-offsetG, 255-offsetA);
 		break;
 	case YELLOW:
-		SDL_SetRenderDrawColor(gRenderer, 255-offsetR, 255-offsetG, 0+offsetG, 255);
+		SDL_SetRenderDrawColor(gRenderer, 255-offsetR, 255-offsetG, 0+offsetG, 255-offsetA);
 		break;
 	case ORANGE:
-		SDL_SetRenderDrawColor(gRenderer, 255-offsetR, 160+offsetG, 0+offsetG, 255);
+		SDL_SetRenderDrawColor(gRenderer, 255-offsetR, 160+offsetG, 0+offsetG, 255-offsetA);
 		break;
 	case BLACK:
-		SDL_SetRenderDrawColor(gRenderer, 0+offsetR, 0+offsetG, 0+offsetG, 255);
+		SDL_SetRenderDrawColor(gRenderer, 0+offsetR, 0+offsetG, 0+offsetG, 255-offsetA);
 		break;
 	case WHITE:
-		SDL_SetRenderDrawColor(gRenderer, 255-offsetR, 255-offsetG, 255-offsetG, 255);
+		SDL_SetRenderDrawColor(gRenderer, 255-offsetR, 255-offsetG, 255-offsetG, 255-offsetA);
 		break;
 	case PURPLE:
-		SDL_SetRenderDrawColor(gRenderer, 128+offsetR, 0+offsetG, 128+offsetG, 255);
+		SDL_SetRenderDrawColor(gRenderer, 128+offsetR, 0+offsetG, 128+offsetG, 255-offsetA);
 	}
 }
 
@@ -52,9 +52,10 @@ SDL_Rect* Rect::getPosition() {
 	return &position;
 }
 
-void Rect::setPosition(int x, int y) {
-	position.x = x;
-	position.y = y;
+///Apply the float position to the real position of the object
+void Rect::applyPosition() {
+	position.x = static_cast<int>(positionX);
+	position.y = static_cast<int>(positionY);
 }
 
 COLOR Rect::getColor() {

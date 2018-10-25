@@ -1,7 +1,7 @@
 #pragma once
 #include "Rect.h"
 #include "Map.h"
-#include "Particle.h"
+#include "ParticleEmitter.h"
 #include <list>
 
 class Map;//Because of recursive inclusion
@@ -18,7 +18,7 @@ public:
 	~Bomb();
 private:
 	Map* map;
-	std::list<std::unique_ptr<Particle>> particleList;
+	std::list<std::unique_ptr<ParticleEmitter>> particleEmitters;
 	Uint32 dropTime;
 	Uint32 explosionTime = 0;
 	bool exploded = false;

@@ -87,7 +87,7 @@ ITEM Map::takeItem(std::array<int, 2> tilePosition) {
 ///Return true if the explosion stop at that tile (aka the tile is a brick or a wall)
 bool Map::destroyTile(std::array<int, 2> tilePosition) {
 	for (auto it = players.begin(); it != players.end(); ++it) {
-		if ((**it).getTilePosition() == tilePosition && SDL_GetTicks() > 10000)
+		if ((**it).getTilePosition() == tilePosition && SDL_GetTicks() > 10000)//Players are invulnerable for 10 sec
 			(**it).die();
 		std::vector<std::shared_ptr<Bomb>>* bombs = (**it).getBombs();
 		for (auto id = bombs->begin(); id != bombs->end(); ++id) {
