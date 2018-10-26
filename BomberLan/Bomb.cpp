@@ -49,8 +49,14 @@ void Bomb::renderCopy(SDL_Renderer* gRenderer) {
 			}
 		}
 	}
-	for (auto it = particleEmitters.begin(); it != particleEmitters.end(); ++it)
-		(**it).ParticleEmitter::renderCopy(gRenderer);
+	auto it = particleEmitters.begin();
+	while (it != particleEmitters.end()){
+		if (!(**it).renderCopy(gRenderer)) {
+			it = particleEmitters.erase(it);
+		}
+		else ++it;
+	}
+
 }
 
 ///return true if the bomb still exist, or else false
@@ -64,13 +70,6 @@ bool Bomb::refresh() {
 	else if (rand()%10==1){
 		std::unique_ptr<ParticleEmitter> particleEmitter{ new ParticleEmitter(getPosition()->x, getPosition()->y, (SDL_GetTicks() - dropTime)/100, 1.5, getColor()) };
 		particleEmitters.push_back(std::move(particleEmitter));
-	}
-	auto it = particleEmitters.begin();
-	while (it != particleEmitters.end()){
-		if (!(**it).refresh()) {
-			it = particleEmitters.erase(it);
-		}
-		else ++it;
 	}
 	return true;
 }

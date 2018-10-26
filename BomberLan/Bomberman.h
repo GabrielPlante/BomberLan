@@ -24,6 +24,7 @@ private:
 	std::vector<std::shared_ptr<Bomb>> droppedBomb;
 	SDL_Renderer* gRenderer;//To drop bomb
 	Direction inputDirection = NOT;
+	Direction direction = NOT;//To avoid shaking
 	std::array<int, 2> destination;
 	int numPlayer;
 	float movingSpeed = 0.2;

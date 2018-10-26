@@ -53,7 +53,7 @@ bool Bomberman::refresh() {
 		}
 		move();
 	}
-	if (!alive && !particleEmitter->refresh())
+	if (!alive)
 		return false;
 	return true;
 }
@@ -75,17 +75,18 @@ void Bomberman::move() {
 		case RIGHT: destination = getTilePosition(); destination[0] = getTilePosition()[0] + 1; break;
 		}
 		if (inputDirection == TOP || inputDirection == BOTTOM) {//Recenter if the player change direction
-			if (getTilePosition()[0] * 35 + 35 / 4 >= getPosition()->x)
+			if (getTilePosition()[0] * 35 + 35 / 4 > getPosition()->x)
 				positionX += movingSpeed * delta;
-			if (getTilePosition()[0] * 35 + 35 / 4 <= getPosition()->x)
+			else if (getTilePosition()[0] * 35 + 35 / 4 < getPosition()->x)
 				positionX -= movingSpeed * delta;
 		}
 		else if (inputDirection == LEFT || inputDirection == RIGHT) {
-			if (getTilePosition()[1] * 35 - 35 / 4 >= getPosition()->y)
+			if (getTilePosition()[1] * 35 - 35 / 4 > getPosition()->y)
 				positionY += movingSpeed * delta;
-			if (getTilePosition()[1] * 35 - 35 / 4 <= getPosition()->y)
+			else if (getTilePosition()[1] * 35 - 35 / 4 < getPosition()->y)
 				positionY -= movingSpeed * delta;
 		}
+		direction = inputDirection;
 	}
 	else if (getTilePosition() == destination)
 		recenter(delta);//If the player is not moving, recenter him
@@ -111,19 +112,34 @@ void Bomberman::dropBomb() {
 }
 
 void Bomberman::recenter(Uint16 delta) {//Move the player toward the center of the tile
-	if (getTilePosition()[0] * 35 + 35/4 >= getPosition()->x)
+	Direction relDirection = NOT;//Relative direction, that mean relative to this frame, not to the bomberman movement
+	if (getTilePosition()[0] * 35 + 35 / 4 > getPosition()->x) {
 		positionX += movingSpeed * delta;
-	if (getTilePosition()[0] * 35 + 35/4 <= getPosition()->x)
+		relDirection = RIGHT;
+	}
+	else if (getTilePosition()[0] * 35 + 35 / 4 < getPosition()->x) {
 		positionX -= movingSpeed * delta;
-	if (getTilePosition()[1] * 35 - 35/4 >= getPosition()->y)
+		relDirection = LEFT;
+	}
+	if (getTilePosition()[1] * 35 - 35 / 4 > getPosition()->y) {
 		positionY += movingSpeed * delta;
-	if (getTilePosition()[1] * 35 - 35/4 <= getPosition()->y)
+		relDirection = BOTTOM;
+	}
+	else if (getTilePosition()[1] * 35 - 35 / 4 < getPosition()->y) {
 		positionY -= movingSpeed * delta;
+		relDirection = TOP;
+	}
+	if (direction != NOT && relDirection != direction) {
+		positionX = getTilePosition()[0]*35 + 35 / 4;
+		positionY = getTilePosition()[1]*35 - 35 / 4;
+		direction = NOT;
+	}
 }
 
 void Bomberman::die() {//So simple
+	if (alive)
+		particleEmitter = std::unique_ptr<ParticleEmitter>(new ParticleEmitter(getPosition()->x, getPosition()->y, 2000, 6, getColor(), 100));
 	alive = false;
-	particleEmitter = std::unique_ptr<ParticleEmitter>(new ParticleEmitter(getPosition()->x, getPosition()->y, 2000, 6, getColor(), 100));
 }
 
 std::vector<std::shared_ptr<Bomb>>* Bomberman::getBombs() {

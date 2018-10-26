@@ -24,9 +24,12 @@ bool ParticleEmitter::refresh() {
 	return true;
 }
 
-void ParticleEmitter::renderCopy(SDL_Renderer* gRenderer) {
+bool ParticleEmitter::renderCopy(SDL_Renderer* gRenderer) {
+	if (!refresh())
+		return false;
 	for (auto it = particleList.begin(); it != particleList.end(); ++it)
 		(**it).Particle::renderCopy(gRenderer);
+	return true;
 }
 
 ParticleEmitter::~ParticleEmitter()
